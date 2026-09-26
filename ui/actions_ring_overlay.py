@@ -65,11 +65,13 @@ RING_LABEL_MAP: dict[str, str] = {
 }
 
 
-def _resolve_ring_label(action_id: str, full_label: str) -> str:
+def _resolve_ring_label(
+    action_id: str, full_label: str, custom_label: str = ""
+) -> str:
     if action_id in RING_LABEL_MAP:
         return RING_LABEL_MAP[action_id]
     if action_id.startswith("custom:"):
-        return full_label[:14]
+        return custom_label.strip() or full_label[:14]
     return full_label[:14]
 
 
