@@ -11,6 +11,7 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import QApplication, QWidget
 
 from core.actions_ring import DEAD_ZONE_RADIUS, angle_to_sector
+from core.key_simulator import custom_action_label
 
 # ── short-label mapping ────────────────────────────────────────────
 
@@ -71,7 +72,11 @@ def _resolve_ring_label(
     if action_id in RING_LABEL_MAP:
         return RING_LABEL_MAP[action_id]
     if action_id.startswith("custom:"):
-        return custom_label.strip() or full_label[:14]
+        # A custom shortcut never has a RING_LABEL_MAP entry and arrives here
+        # with full_label still set to the raw "custom:..." id, so render the
+        # combo instead. Labels are word-wrapped when drawn, so this branch
+        # does not need the truncation the generic fallback applies.
+        return custom_label.strip() or custom_action_label(action_id)
     return full_label[:14]
 
 

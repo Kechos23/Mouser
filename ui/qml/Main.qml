@@ -44,7 +44,9 @@ ApplicationWindow {
         if (backend.hapticSupported) {
             items.push({ icon: "circle", tipKey: "nav.haptic_feedback", page: 2 })
         }
-        if (backend.deviceHasActionsRing && backend.actionsRingActive) {
+        // The ring itself runs on any device that has a button mapped to it
+        // (see core/engine.py), so gate its config page on the mapping alone.
+        if (backend.actionsRingActive) {
             items.push({ icon: "target", tipKey: "nav.actions_ring", page: 3 })
         }
         return items
@@ -287,7 +289,7 @@ ApplicationWindow {
                 source: "HapticPage.qml"
             }
             Loader {
-                active: (root.currentPage === 3 || item) && backend.deviceHasActionsRing && backend.actionsRingActive
+                active: (root.currentPage === 3 || item) && backend.actionsRingActive
                 source: "ActionsRingConfig.qml"
             }
         }
